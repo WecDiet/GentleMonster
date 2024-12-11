@@ -1,6 +1,6 @@
 Project Spring Boot:
-* GentleMonster_BE
-* GentleMonster_FE:
+* GentleMonster_BE (java)
+* GentleMonster_FE (reactjs):
   + Website Admin
   + Website Interface
   
