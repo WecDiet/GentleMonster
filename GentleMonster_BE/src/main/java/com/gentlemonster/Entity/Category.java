@@ -28,7 +28,7 @@ public class Category {
     @Column(name = "image", length = 300, nullable = false)
     private String image;
 
-    @Column(name = "Status", nullable = false)
+    @Column(name = "status", nullable = false)
     private boolean active;
 
     @Column(name = "category", length = 100, nullable = false)
@@ -42,16 +42,21 @@ public class Category {
     @Column(name = "created_date")
     private Date createdDate;
 
+    @CreationTimestamp
+    @Temporal(TemporalType.DATE)
+    @Column(name = "modified_date")
+    private Date modifiedDate;
+
     @OneToMany(mappedBy = "category")
     @JsonIgnoreProperties("category")
-    private Set<Product> products = new HashSet<>();
+    private Set<ProductType> productType = new HashSet<>();
 
-    public Category(String name, String image, boolean active, Date createdDate,String category,String slug, Set<Product> products) {
+    public Category(String name, String image, boolean active, Date createdDate,String category,String slug, Set<ProductType> productType) {
         this.name = name;
         this.image = image;
         this.active = active;
         this.createdDate = createdDate;
-        this.products = products;
+        this.productType = productType;
         this.category = category;
         this.slug = slug;
     }

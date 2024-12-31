@@ -37,7 +37,11 @@ public class WebSecurityConfig {
                                 String.format("%s/roles/*", Endpoint.API_PREFIX_ADMIN),
                                 // API Get All Category
                                 String.format("%s/categories", Endpoint.API_PREFIX_ADMIN),
-                                String.format("%s/categories/*", Endpoint.API_PREFIX_ADMIN)
+                                String.format("%s/categories/*", Endpoint.API_PREFIX_ADMIN),
+                                // API Get All Product
+                                String.format("%s/products", Endpoint.API_PREFIX_ADMIN),
+                                // API Get All ProductType
+                                String.format("%s/product-types", Endpoint.API_PREFIX_ADMIN)
                         ).permitAll()
 
                         // Phương thức POST cho phép tất cả các request
@@ -47,7 +51,11 @@ public class WebSecurityConfig {
                                 // API Create Role
                                 String.format("%s/new", Endpoint.Role.BASE),
                                 // API Create Category
-                                String.format("%s/new", Endpoint.Category.BASE)
+                                String.format("%s/new", Endpoint.Category.BASE),
+                                // API Create Product
+                                String.format("%s/new", Endpoint.Product.BASE),
+                                // API Create ProductType
+                                String.format("%s/new", Endpoint.ProductType.BASE)
                         ).permitAll()
 
                         // Phương thức PUT cho phép tất cả các request
@@ -55,7 +63,11 @@ public class WebSecurityConfig {
                                 // API Update User
                                 String.format("%s/users/*", Endpoint.API_PREFIX_ADMIN),
                                 // API Update Role
-                                String.format("%s/roles/role_detail/*", Endpoint.API_PREFIX_ADMIN)
+                                String.format("%s/roles/*", Endpoint.API_PREFIX_ADMIN),
+                                // API Update Category
+                                String.format("%s/categories/*", Endpoint.API_PREFIX_ADMIN),
+                                // API Update Product-Type
+                                String.format("%s/product-types/*", Endpoint.API_PREFIX_ADMIN)
                         ).permitAll()
 
                         // Phương thức DELETE cho phép tất cả các request
@@ -64,7 +76,11 @@ public class WebSecurityConfig {
                                 String.format("%s/users/*", Endpoint.API_PREFIX_ADMIN),
                                 String.format("%s/users/delete-many", Endpoint.API_PREFIX_ADMIN),
                                 // API Delete Role
-                                String.format("%s/roles/role_detail/*", Endpoint.API_PREFIX_ADMIN)
+                                String.format("%s/roles/role_detail/*", Endpoint.API_PREFIX_ADMIN),
+                                // API Delete Category
+                                String.format("%s/categories/*", Endpoint.API_PREFIX_ADMIN),
+                                // API Delete Product-Type
+                                String.format("%s/product-types/*", Endpoint.API_PREFIX_ADMIN)
                         ).permitAll()
                         .anyRequest()
                         .authenticated()

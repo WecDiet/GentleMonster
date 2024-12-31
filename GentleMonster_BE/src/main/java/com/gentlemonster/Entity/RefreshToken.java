@@ -1,0 +1,29 @@
+package com.gentlemonster.Entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.Date;
+
+@Getter
+@Setter
+@Builder
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "refresh_token")
+public class RefreshToken {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(nullable = false, unique = true)
+    private String refreshtoken;
+
+    @Column(nullable = false)
+    private Date expiryDate;
+}

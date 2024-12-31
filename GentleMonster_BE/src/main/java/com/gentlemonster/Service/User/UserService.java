@@ -45,8 +45,7 @@ public class UserService implements IUserService {
     private PasswordEncoder passwordEncode;
     @Autowired
     private IRoleRepository iRoleRepository;
-
-
+    
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Override
@@ -60,6 +59,7 @@ public class UserService implements IUserService {
             userResponseList = new ArrayList<>(userList.stream()
                     .map(user -> modelMapper.map(user, UserResponse.class))
                     .toList());
+//            logger.info("username: "+ userList.get(0).getUsername());
             List<String> messages = new ArrayList<>();
             messages.add(localizationUtil.getLocalizedMessage(MessageKey.USER_GET_SUCCESS));
             return new PagingResponse<>(userResponseList, messages, 1, (long) userResponseList.size());
@@ -90,17 +90,33 @@ public class UserService implements IUserService {
             logger.info("Phone number already existed");
             return new APIResponse<>(null,messages);
         }
-        User userCreated = modelMapper.map(addUserRequest, User.class);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            userCreated.setBirthday(dateFormat.parse(addUserRequest.getBirthday()));
-        } catch (ParseException e) {
-            logger.info("Invalid date format. Expected format: yyyy-MM-dd");
-            throw new RuntimeException("Invalid date format. Expected format: yyyy-MM-dd");
+        if(addUserRequest.getEmail().isEmpty() || !addUserRequest.getEmail().contains("@")){
+            List<String> messages = new ArrayList<>();
+            messages.add(localizationUtil.getLocalizedMessage(MessageKey.USER_EMAIL_INVALID));
+            logger.info("Email is invalid");
+            return new APIResponse<>(null,messages);
         }
+        User userCreated = modelMapper.map(addUserRequest, User.class);
+//        String extractedEmail = addUserRequest.getEmail().split("@")[0];
+//        logger.info("Extracted email: " + extractedEmail);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(addUserRequest.getYear(), addUserRequest.getMonth() - 1, addUserRequest.getDay());
+
+        // Kiểm tra ngày hợp lệ
+        Date birthday = calendar.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = dateFormat.format(birthday);
+        try {
+            userCreated.setBirthDay(dateFormat.parse(formattedDate));
+        } catch (ParseException e) {
+            logger.error("Error parsing date: " + formattedDate, e);
+            throw new RuntimeException("Invalid date format: " + formattedDate, e);
+        }
+
         userCreated.setPassword(passwordEncode.encode(addUserRequest.getPassword()));
-        userCreated.setFullName(addUserRequest.getFirstName() + " "+addUserRequest.getMiddleName()+ " " + addUserRequest.getLastName());
-        if (addUserRequest.getRoles() != null) {
+        userCreated.setFullName(addUserRequest.getTitle() + " "+ addUserRequest.getFirstName() + " " + addUserRequest.getLastName());
+//        userCreated.setUsername(extractedEmail);
+        if (!addUserRequest.getRoles().isEmpty()) {
             Set<Role> managedRoles = new HashSet<>();
             for (Role role : addUserRequest.getRoles()) {
                 Role existingRole = iRoleRepository.findByName(role.getName())
@@ -122,6 +138,7 @@ public class UserService implements IUserService {
                 .orElseThrow(() -> new DataExistedException("User not found with ID" + userID));
 
         UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+
         List<String> messages = new ArrayList<>();
         messages.add(localizationUtil.getLocalizedMessage(MessageKey.USER_GET_ONE_SUCCESS));
         logger.info("Get user by ID successfully");
@@ -130,6 +147,7 @@ public class UserService implements IUserService {
 
     @Override
     public APIResponse<UserResponse> updateUser(EditUserRequest editUserRequest) {
+        Date now = new Date(System.currentTimeMillis());
         User user = iUserRepository.findByEmail(editUserRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + editUserRequest.getEmail()));
         modelMapper.map(editUserRequest, user);
@@ -142,8 +160,22 @@ public class UserService implements IUserService {
             }
             user.setRoles(updatedRoles);
         }
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(editUserRequest.getYear(), editUserRequest.getMonth() - 1, editUserRequest.getDay());
+        // Kiểm tra ngày hợp lệ
+        Date birthday = calendar.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        String formattedDate = dateFormat.format(birthday);
+        try {
+            user.setBirthDay(dateFormat.parse(formattedDate));
+        } catch (ParseException e) {
+            logger.error("Error parsing date: " + formattedDate, e);
+            throw new RuntimeException("Invalid date format: " + formattedDate, e);
+        }
+
         user.setPassword(passwordEncode.encode(editUserRequest.getPassword()));
-        user.setFullName(editUserRequest.getFirstName() + " "+editUserRequest.getMiddleName()+ " " + editUserRequest.getLastName());
+        user.setFullName(editUserRequest.getTitle() + " "+ editUserRequest.getFirstName() + " " + editUserRequest.getLastName());
+        user.setModifiedDate(now);
         iUserRepository.save(user);
         UserResponse userResponse = modelMapper.map(user, UserResponse.class);
         List<String> messages = new ArrayList<>();

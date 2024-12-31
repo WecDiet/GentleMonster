@@ -35,6 +35,7 @@ public class MessageKey {
     public static final String USER_DELETE_SUCCESS = "user.delete_success";
     public static final String NOT_DELETE_ADMIN_USER = "user.not_delete_admin";
     public static final String USER_GET_ONE_SUCCESS = "user.get_one_success";
+    public static final String USER_EMAIL_INVALID = "user.email_invalid";
 
     // PAYMENT TYPE
     public static final String PAYMENT_TYPE_CREATE_SUCCESS = "payment_type.create_success";
@@ -60,5 +61,13 @@ public class MessageKey {
     public static final String PRODUCT_LIKE_FAILED = "product.like_failed";
     public static final String PRODUCT_UNLIKED = "product.unlike_success";
     public static final String PRODUCT_UNLIKED_FAILED = "product.unlike_failed";
+
+    // PRODUCT TYPE
+    public static final String PRODUCT_TYPE_CREATE_SUCCESS = "product_type.create_success";
+    public static final String PRODUCT_TYPE_UPDATE_SUCCESS = "product_type.update_success";
+    public static final String PRODUCT_TYPE_DELETE_SUCCESS = "product_type.delete_success";
+    public static final String PRODUCT_TYPE_GET_SUCCESS = "product_type.get_success";
+    public static final String PRODUCT_TYPE_NOT_FOUND = "product_type.not_found";
+
 }
 

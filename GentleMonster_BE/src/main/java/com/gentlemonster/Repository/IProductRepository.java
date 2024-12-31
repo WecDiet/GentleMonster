@@ -9,6 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IProductRepository extends JpaRepository<Product, UUID>, JpaSpecificationExecutor<Product> {
-    List<Product> findAllByIsActive(boolean isActive);
-    Long countAllByIsActive(boolean isActive);
+    List<Product> findAllByActive(boolean active);
+    Long countAllByActive(boolean active);
 }

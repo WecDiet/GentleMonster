@@ -52,7 +52,7 @@ public class RoleController {
 
     }
 
-    @PutMapping(Endpoint.Role.ID)
+    @PutMapping(Endpoint.Role.EDIT)
     public ResponseEntity<APIResponse<RoleResponse>> updateRole(@PathVariable String roleID, @RequestBody EditRoleRequest editRoleRequest, BindingResult result) {
         if (result.hasErrors()) {
             List<String> errorMessages = result.getFieldErrors()
@@ -66,7 +66,7 @@ public class RoleController {
         return ResponseEntity.ok(roleService.editRole(roleID,editRoleRequest));
     }
 
-    @DeleteMapping(Endpoint.Role.ID)
+    @DeleteMapping(Endpoint.Role.DELETE)
     public ResponseEntity<APIResponse<Boolean>> deleteRole(@PathVariable String roleID) {
         return ResponseEntity.ok(roleService.deleteRole(roleID));
     }

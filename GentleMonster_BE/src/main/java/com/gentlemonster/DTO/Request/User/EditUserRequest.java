@@ -15,17 +15,20 @@ import java.util.Set;
 public class EditUserRequest {
     @NotEmpty(message = "First name is required")
     private String firstName;
-    @NotEmpty(message = "Middle name is required")
-    private String middleName;
+    @NotEmpty(message = "title is required not empty !")
+    private String title;
     @NotEmpty(message = "Last name is required")
     private String lastName;
     @NotEmpty(message = "Email is required")
     private String email;
     @NotEmpty(message = "Phone number is required")
     private String phoneNumber;
-    private boolean sex;
-    @NotEmpty(message = "Birthday is required")
-    private String birthday;
+    @NotEmpty(message = "day is required not empty !")
+    private int day;
+    @NotEmpty(message = "month is required not empty !")
+    private int month;
+    @NotEmpty(message = "year is required not empty !")
+    private int year;
     @NotEmpty(message = "Password is required")
     private String password;
     private boolean status;

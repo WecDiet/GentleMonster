@@ -33,15 +33,20 @@ public class Product {
 
     @ElementCollection
     @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
-    private Set<String> images = new HashSet<>();
+    private List<String> images = new ArrayList<>();
 
     @Column(name = "status", nullable = false)
-    private boolean isActive;
+    private boolean active;
 
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
     @Column(name = "created_date")
     private Date createdDate;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.DATE)
+    @Column(name = "modified_date")
+    private Date modifiedDate;
 
     // Khung
     @Column(name = "frame", length = 100)
@@ -79,17 +84,19 @@ public class Product {
     @Column(name = "manufacturer", length = 200)
     private String manufacturer;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-
     @ManyToMany(mappedBy = "likeProductList")
     @JsonIgnore
     private List<User> userLikedList;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "viewedProductList")
-    private Set<User> userViewedList;
+    private List<User> userViewedList;
+
+    @ManyToOne
+    @JoinColumn(name = "productTypeId")
+    private ProductType productType;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Feedback> feedBackList = new ArrayList<>();
 
 }

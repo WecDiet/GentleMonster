@@ -3,6 +3,7 @@ package com.gentlemonster.Browser.Admin.Controller;
 import com.gentlemonster.Constant.Endpoint;
 import com.gentlemonster.DTO.Request.Category.AddCategoryRequest;
 import com.gentlemonster.DTO.Request.Category.CategoryRequest;
+import com.gentlemonster.DTO.Request.Category.EditCategoryRequest;
 import com.gentlemonster.DTO.Response.PagingResponse;
 import com.gentlemonster.Enum.CategoryUtils;
 import com.gentlemonster.Enum.SlugUtils;
@@ -58,5 +59,27 @@ public class CategoryController {
         String normalizedCategory = CategoryUtils.toCategory(addCategoryRequest.getCategory());
         addCategoryRequest.setCategory(normalizedCategory);
         return ResponseEntity.ok(categoryService.addCategory(addCategoryRequest));
+    }
+
+    @PutMapping(Endpoint.Category.EDIT)
+    public ResponseEntity<?> updateCategory(@PathVariable String categoryID ,@Valid @RequestBody EditCategoryRequest editCategoryRequest, BindingResult result) {
+        if (result.hasErrors()) {
+            List<String> errorMessages = result.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .toList();
+            // Creating an APIResponse with error messages
+            return ResponseEntity.badRequest().body(errorMessages);
+        }
+        String normalizedSlug = SlugUtils.toSlug(editCategoryRequest.getSlug());
+        editCategoryRequest.setSlug(normalizedSlug);
+        String normalizedCategory = CategoryUtils.toCategory(editCategoryRequest.getCategory());
+        editCategoryRequest.setCategory(normalizedCategory);
+        return ResponseEntity.ok(categoryService.editCategory(categoryID,editCategoryRequest));
+    }
+
+    @DeleteMapping(Endpoint.Category.DELETE)
+    public ResponseEntity<?> deleteCategory(@PathVariable String categoryID) {
+        return ResponseEntity.ok(categoryService.deleteCategory(categoryID));
     }
 }

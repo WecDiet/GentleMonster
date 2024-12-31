@@ -3,10 +3,12 @@ package com.gentlemonster.Service.Category;
 import com.gentlemonster.Constant.MessageKey;
 import com.gentlemonster.DTO.Request.Category.AddCategoryRequest;
 import com.gentlemonster.DTO.Request.Category.CategoryRequest;
+import com.gentlemonster.DTO.Request.Category.EditCategoryRequest;
 import com.gentlemonster.DTO.Response.APIResponse;
 import com.gentlemonster.DTO.Response.Category.CategoryResponse;
 import com.gentlemonster.DTO.Response.PagingResponse;
 import com.gentlemonster.Entity.Category;
+import com.gentlemonster.Exception.DataExistedException;
 import com.gentlemonster.Repository.ICategoryRepository;
 import com.gentlemonster.Repository.Specification.CategorySpecification;
 import com.gentlemonster.Utils.LocalizationUtil;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -68,5 +71,24 @@ public class CategoryService implements ICategoryService {
         List<String> messages = new ArrayList<>();
         messages.add(localizationUtils.getLocalizedMessage(MessageKey.CATEGORY_CREATE_SUCCESS));
         return new APIResponse<>(addCategory, messages);
+    }
+
+    @Override
+    public APIResponse<Category> editCategory(String categoryID,EditCategoryRequest editCategoryRequest) {
+        Category editCategory = iCategoryRepository.findById(UUID.fromString(categoryID)).orElseThrow(() -> new DataExistedException("Category not found with ID" + categoryID));
+        modelMapper.map(editCategoryRequest, editCategory);
+        iCategoryRepository.save(editCategory);
+        List<String> messages = new ArrayList<>();
+        messages.add(localizationUtils.getLocalizedMessage(MessageKey.CATEGORY_UPDATE_SUCCESS));
+        return new APIResponse<>(editCategory, messages);
+    }
+
+    @Override
+    public APIResponse<Boolean> deleteCategory(String categoryID) {
+        Category category = iCategoryRepository.findById(UUID.fromString(categoryID)).orElseThrow(() -> new DataExistedException("Category not found with ID" + categoryID));
+        iCategoryRepository.delete(category);
+        List<String> messages = new ArrayList<>();
+        messages.add(localizationUtils.getLocalizedMessage(MessageKey.CATEGORY_DELETE_SUCCESS));
+        return new APIResponse<>(true, messages);
     }
 }

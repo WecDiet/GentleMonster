@@ -13,20 +13,19 @@ import java.util.UUID;
 @Builder
 public class UserResponse {
     private UUID id;
+    private String title;
     private String firstName;
-    private String middleName;
     private String lastName;
     private String fullName;
     private String email;
     private String employeeCode;
     private String phoneNumber;
-    private boolean sex;
     private String street;
     private String ward;
     private String district;
     private String city;
-    private String birthday;
-    private String username;
+    private String country;
+    private String birthDay;
     private String password;
     private String photos;
     private boolean status;

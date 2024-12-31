@@ -17,7 +17,7 @@ public class AddProductRequest {
     private double price;
     private int quantity;
     private Set<String> images = new HashSet<>();
-    private boolean isActive;
+    private boolean active;
     private String frame;
     private String lens;
     private String shape;
@@ -27,5 +27,5 @@ public class AddProductRequest {
     private double bridge;
     private String country;
     private String manufacturer;
-    private String category;
+    private String productType;
 }

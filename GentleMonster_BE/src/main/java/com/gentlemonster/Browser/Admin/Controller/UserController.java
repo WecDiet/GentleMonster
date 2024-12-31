@@ -42,7 +42,6 @@ public class UserController {
                     .map(FieldError::getDefaultMessage)
                     .toList();
             // Creating an APIResponse with error messages
-//            APIResponse<User> errorResponse = new APIResponse<>(null, errorMessages);
             logger.error("Error Search user: " + errorMessages);
             return ResponseEntity.badRequest().body(new PagingResponse<>(null,  errorMessages, 0, (long) 0));
         }
@@ -88,7 +87,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getOneUser(userID));
     }
 
-    @PutMapping(Endpoint.User.ID)
+    @PutMapping(Endpoint.User.EDIT)
     public ResponseEntity<APIResponse<UserResponse>> updateUser(@Valid @RequestBody EditUserRequest editUserRequest, BindingResult result) {
         if (result.hasErrors()) {
             List<String> errorMessages = result.getFieldErrors()
@@ -104,7 +103,7 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(editUserRequest));
     }
 
-    @DeleteMapping(Endpoint.User.ID)
+    @DeleteMapping(Endpoint.User.DELETE)
     public ResponseEntity<APIResponse<Boolean>> deleteUser(@PathVariable String userID) {
         if (userID.isEmpty()) {
             logger.error("Error deleting user: ID is required, not empty!");
